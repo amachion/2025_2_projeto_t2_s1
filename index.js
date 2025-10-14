@@ -1,6 +1,8 @@
 const express = require("express");
+const cors = require("cors")
 const app = express();
 app.use(express.json());
+app.use(cors())
 
 //endpoint para atender uma requisição GET, que responde "oi"
 app.get("/oi", (req, res) => {
@@ -24,6 +26,18 @@ let filmes = [
 
 app.get('/filmes', (req, res) => {
     res.send(filmes)
+})
+
+//endpoint para cadastrar novo filme NA MEMÓÓÓRIA do navegador
+app.post('/filmes', (req, res) => {
+  //montar o objeto JSON com as informações enviadas
+  const titulo = req.body.titulo
+  const sinopse = req.body.sinopse
+  const filme = {titulo: titulo, sinopse: sinopse}
+  //inserir na lista de filmessss o filme novo
+  filmes.push(filme)
+  //só para verificar 
+  res.send(filmes)
 })
 
 app.listen(3000, () => {
