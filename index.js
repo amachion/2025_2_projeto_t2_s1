@@ -1,3 +1,6 @@
+//link do banco
+//mongodb+srv://pro_mac:<db_password>@cluster0.skf8n.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+
 const express = require("express");
 const cors = require("cors")
 const app = express();
