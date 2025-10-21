@@ -23,3 +23,17 @@ async function obtemFilmes() {
         colunaSinopse.innerHTML = filme.sinopse
     }
 }
+
+async function cadastrarFilme() {
+    //monta a URL completa usando a crase
+    const URLcompleta = `${protocolo}${baseURL}${filmesEndpoint}`
+    //se posicionar nos inputs
+    let tituloInput = document.querySelector('#tituloInput')
+    let sinopseInput = document.querySelector('#sinopseInput')
+    //pega o que o usuário digitou em cada um 
+    let titulo = tituloInput.value
+    let sinopse = sinopseInput.value
+    //limpa as caixinhas de digitação
+    tituloInput.value = ""
+    sinopseInput.value = ""
+}
