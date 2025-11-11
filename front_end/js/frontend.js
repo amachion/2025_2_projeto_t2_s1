@@ -1,12 +1,10 @@
 const protocolo = "http://";
 const baseURL = "localhost:3000";
-const filmesEndpoint = "/filmes";
 
 async function obtemFilmes() {
-  // console.log ("teste")
+  const filmesEndpoint = "/filmes";
   const URLcompleta = `${protocolo}${baseURL}${filmesEndpoint}`;
   const filmes = (await axios.get(URLcompleta)).data;
-  //console.log(filmes);
   //posicionar no elemnto tabela da página
   let tabela = document.querySelector(".filmes");
   //posicionar no tbody:
@@ -25,6 +23,7 @@ async function obtemFilmes() {
 }
 
 async function cadastrarFilme() {
+  const filmesEndpoint = "/filmes";
   //monta a URL completa usando a crase
   const URLcompleta = `${protocolo}${baseURL}${filmesEndpoint}`;
   //se posicionar nos inputs
@@ -63,4 +62,58 @@ async function cadastrarFilme() {
         alert.classList.add('d-none')
     }, 2000)
   }
+}
+async function cadastrarUsuario() {
+  //1. posicionar nos campos de input do modal
+  let usuarioCadastroInput = document.querySelector('#usuarioCadastroInput')
+  let passwordCadastroInput = document.querySelector('#passwordCadastroInput')
+  //2. captura o que o usuário digitou
+  let usuarioCadastro = usuarioCadastroInput.value
+  let passwordCadastro = passwordCadastroInput.value
+  if (usuarioCadastro && passwordCadastro) {
+    //cadastrar, utilizando uma uma estrutura try - catch
+    try {
+      //1. definir o endpoint
+      const cadastroInput = '/signup'
+      //2. montar a URL completa
+      const URLcompleta = `${protocolo}${baseURL}${cadastroInput}`
+      await axios.post(URLcompleta, {login: usuarioCadastro, password: passwordCadastro})
+      usuarioCadastroInput.value = ""
+      passwordCadastroInput.value = ""
+      let alert = document.querySelector('.alert-modal-cadastro')
+      alert.innerHTML = "Usuário cadastrado com sucesso!"
+      alert.classList.add('show', 'alert-success')
+      alert.classList.remove('d-none', 'alert-danger')
+      setTimeout(() => {
+        alert.classList.add ('d-none')
+        alert.classList.remove ('show')
+        let modalCadastro = bootstrap.Modal.getInstance(document.querySelector("#modalCadastro"))
+        modalCadastro.hide()
+      }, 2000)
+    }
+    catch (error) {
+      //exibir o alerta que o usuário já existe
+      let alert = document.querySelector('.alert-modal-cadastro')
+      alert.innerHTML = "Usuário já existe!!!"
+      alert.classList.add('show', 'alert-danger')
+      alert.classList.remove('d-none')
+      setTimeout(() => {
+        alert.classList.add('d-none')
+        alert.classList.remove('show', 'alert-danger')
+        let modalCadastro = bootstrap.Modal.getInstance(document.querySelector("#modalCadastro"))
+        modalCadastro.hide()
+      }, 2000)
+    }
+  }
+  else {
+    //exibir o alerta para digitar tudo
+    let alert = document.querySelector('.alert-modal-cadastro')
+    alert.innerHTML = "Preencha todos os campos"
+    alert.classList.add('show', 'alert-danger')
+    alert.classList.remove('d-none')
+    setTimeout(() => {
+      alert.classList.add('d-none')
+      alert.classList.remove('show', 'alert-danger')
+    }, 2000)
+  }  
 }

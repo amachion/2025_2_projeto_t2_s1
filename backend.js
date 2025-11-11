@@ -4,6 +4,7 @@ const mongoose = require("mongoose")
 require('dotenv').config()
 const uniqueValidator = require('mongoose-unique-validator')
 const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
 const app = express();
 app.use(express.json());
 app.use(cors())
@@ -59,8 +60,29 @@ app.post('/signup', async (req, res) => {
   }
 })
 
-
-
+app.post ('/login', async (req, res) => {
+  //captura o que o usuário digitou
+  const login = req.body.login
+  const password = req.body.password
+  //busca no Mongo, armazenando sua resposta
+  const user = await Usuario.findOne({login: login})
+  if (!user) {
+    //usuário não encontrado
+    return res.status(401).json({mensagem: "login inválido"})
+  }
+  const senhaValida = await bcrypt.compare(password, user.password)
+  if (!senhaValida) {
+    //senha digitada incorretamente
+    return res.status(401).json({mensagem: "senha inválida"})
+  }
+  //vamos gerar o token, utilizando o método sign
+  const token = jwt.sign(
+    {login: login},
+    "chave-secreta",
+    {expiresIn: "1h"}
+  )
+  res.status(200).json({token: token})
+})
 const stringConexao = process.env.CONEXAO_DB
 
 async function conectarAoMongoDB () {
